@@ -4,7 +4,7 @@ using HoloToolkit.Unity.InputModule;
 using HoloToolkitExtensions.Utilities;
 using UnityEngine;
 
-public class SelectorDemo : MonoBehaviour, IInputClickHandler, IInputHandler    
+public class SelectorDemo : MonoBehaviour, IInputHandler    
 {
     public Color SelectColor = Color.blue;
 
@@ -19,15 +19,11 @@ public class SelectorDemo : MonoBehaviour, IInputClickHandler, IInputHandler
         SaveDefaultColors();
     }
 
-    public void OnInputClicked(InputClickedEventData eventData)
-    {
-        HandleClick();
-    }
-
     public void OnInputDown(InputEventData eventData)
     {
         if (eventData.PressType == InteractionSourcePressInfo.Select)
         {
+            Debug.Log("OnInputDown");
             HandleClick();
         }
     }

@@ -55,11 +55,6 @@ namespace HoloToolkitExtensions.Utilities
                     gameObject.transform.rotation = _initialRotation;
                 }
 
-                if (eventData.XboxA_Pressed)
-                {
-                    if (!_doubleClickPreventer.CanClick()) return;
-                }
-
                 HandleCustomAction(eventData);
             }
         }

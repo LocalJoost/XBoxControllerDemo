@@ -19,48 +19,48 @@ namespace HoloToolkitExtensions.Utilities
             _initialPosition = gameObject.transform.position;
         }
 
-        public void OnXboxInputUpdate(XboxControllerEventData eventData)
+public void OnXboxInputUpdate(XboxControllerEventData eventData)
+{
+    if (!UnityEngine.XR.XRDevice.isPresent)
+    {
+        var speed = 1.0f + TriggerAccerationFactor * eventData.XboxRightTriggerAxis;
+
+        gameObject.transform.position += eventData.XboxLeftStickHorizontalAxis * 
+                                         gameObject.transform.right * MoveSpeed * speed;
+        gameObject.transform.position += eventData.XboxLeftStickVerticalAxis * 
+                                         gameObject.transform.forward * MoveSpeed * speed;
+
+        gameObject.transform.RotateAround(gameObject.transform.position, 
+            gameObject.transform.up, 
+            eventData.XboxRightStickHorizontalAxis * Rotatespeed * speed);
+        gameObject.transform.RotateAround(gameObject.transform.position, 
+            gameObject.transform.right, 
+            -eventData.XboxRightStickVerticalAxis * Rotatespeed * speed);
+
+        gameObject.transform.RotateAround(gameObject.transform.position, 
+            gameObject.transform.forward, 
+            eventData.XboxDpadHorizontalAxis * Rotatespeed * speed);
+
+        var delta = Mathf.Sign(eventData.XboxDpadVerticalAxis) * 
+                    gameObject.transform.up * MoveSpeed * speed;
+        if (Mathf.Abs(eventData.XboxDpadVerticalAxis) &gt; 0.0001f)
         {
-            if (!UnityEngine.XR.XRDevice.isPresent)
-            {
-                var speed = 1.0f + TriggerAccerationFactor * eventData.XboxRightTriggerAxis;
-
-                gameObject.transform.position += eventData.XboxLeftStickHorizontalAxis * 
-                                                 gameObject.transform.right * MoveSpeed * speed;
-                gameObject.transform.position += eventData.XboxLeftStickVerticalAxis * 
-                                                 gameObject.transform.forward * MoveSpeed * speed;
-
-                gameObject.transform.RotateAround(gameObject.transform.position, 
-                    gameObject.transform.up, 
-                    eventData.XboxRightStickHorizontalAxis * Rotatespeed * speed);
-                gameObject.transform.RotateAround(gameObject.transform.position, 
-                    gameObject.transform.right, 
-                    -eventData.XboxRightStickVerticalAxis * Rotatespeed * speed);
-
-                gameObject.transform.RotateAround(gameObject.transform.position, 
-                    gameObject.transform.forward, 
-                    eventData.XboxDpadHorizontalAxis * Rotatespeed * speed);
-
-                var delta = Mathf.Sign(eventData.XboxDpadVerticalAxis) * 
-                            gameObject.transform.up * MoveSpeed * speed;
-                if (Mathf.Abs(eventData.XboxDpadVerticalAxis) > 0.0001f)
-                {
-                    gameObject.transform.position += delta;
-                }
-
-                if (eventData.XboxB_Pressed)
-                {
-                    if (!_doubleClickPreventer.CanClick()) return;
-                    gameObject.transform.position = _initialPosition;
-                    gameObject.transform.rotation = _initialRotation;
-                }
-
-                HandleCustomAction(eventData);
-            }
+            gameObject.transform.position += delta;
         }
 
-        protected virtual void HandleCustomAction(XboxControllerEventData eventData)
+        if (eventData.XboxB_Pressed)
         {
+            if (!_doubleClickPreventer.CanClick()) return;
+            gameObject.transform.position = _initialPosition;
+            gameObject.transform.rotation = _initialRotation;
         }
+
+        HandleCustomAction(eventData);
+    }
+}
+
+protected virtual void HandleCustomAction(XboxControllerEventData eventData)
+{
+}
     }
 }
